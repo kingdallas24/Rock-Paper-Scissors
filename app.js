@@ -1,11 +1,72 @@
-// Create a function that will randomly return rock paper or scissors
-// In the function generate a random number. Let's split 10 into 3 parts
-/*
-if random number is >= 0 && random number is <= 10*(1/3) return rock
-if random number is > 10*(1/3) && random number is <= 10*(2/3) return paper
-if random number is > 10*(2/3) && random number is <= 10 return scissors
+let btn = document.querySelectorAll(".btn");
+let playerScore = 0;
+let computerScore = 0;
 
-*/
+let playerSelection = "";
+let scoreBoard = document.createElement("div");
+let scoreBoard2 = document.createElement("div");
+
+let roundResult = document.createElement("p");
+let startButton = document.createElement("button");
+let resetButton = document.createElement("button");
+resetButton.classList.add("btn");
+
+scoreBoard.textContent;
+scoreBoard2.textContent;
+startButton.textContent = "Start";
+resetButton.textContent = "Reset";
+scoreBoard.setAttribute(
+  "style",
+  "color: red; border: 2px solid red; height:100px; width:200px; margin:10px auto;"
+);
+
+scoreBoard2.setAttribute(
+  "style",
+  "color: blue; border: 2px solid blue; height:100px; width:200px; margin:10px auto;"
+);
+
+scoreBoard.style.fontSize = "32px";
+scoreBoard2.style.fontSize = "32px";
+
+resetButton.setAttribute(
+  "style",
+  "background: white; position:absolute; left: 50%"
+);
+startButton.setAttribute(
+  "style",
+  "background: white;position:absolute; left: 43%"
+);
+
+roundResult.style.textAlign = "center";
+document.body.appendChild(scoreBoard);
+document.body.appendChild(scoreBoard2);
+
+document.body.appendChild(roundResult);
+document.body.appendChild(startButton);
+document.body.appendChild(resetButton);
+
+startButton.addEventListener("mouseover", (e) => {
+  e.target.style.background = "hsl(0, 3%, 72%)";
+});
+
+startButton.addEventListener("mouseleave", (e) => {
+  e.target.style.background = "white";
+});
+
+resetButton.addEventListener("mouseover", (e) => {
+  e.target.style.background = "hsl(0, 3%, 72%)";
+});
+
+resetButton.addEventListener("mouseleave", (e) => {
+  e.target.style.background = "white";
+});
+
+startButton.addEventListener("click", (e) => {
+  startGame();
+  scoreBoard2.textContent = "Computer Score: " + computerScore;
+
+  scoreBoard.textContent = "Player Score: " + playerScore;
+});
 
 function computerPlay() {
   if (Math.random() * 10 >= 0 && Math.random() * 10 <= 10 * (1 / 3)) {
@@ -20,114 +81,164 @@ function computerPlay() {
   }
 }
 
-let playerScore = 0;
-let computerScore = 0;
+function startGame() {
+  btn.forEach((choice) => {
+    choice.addEventListener("click", (e) => {
+      if (choice.classList.contains("rock")) {
+        playerSelection = "rock";
+      } else if (choice.classList.contains("scissors")) {
+        playerSelection = "scissors";
+      } else if (choice.classList.contains("paper")) {
+        playerSelection = "paper";
+      }
 
-function playRound() {
-  const playerSelection = prompt("Choose rock, paper, or scissors.");
+      game();
+    });
+  });
+}
+
+let playRound = function () {
   const computerSelection = computerPlay();
+
   if (playerSelection === "rock" && computerSelection === "paper") {
     let result = "You lose. Paper beats rock";
-    computerScore++;
+    roundResult.textContent = result;
+
+    if (computerScore < 5 && playerScore < 5) {
+      computerScore++;
+    }
+    scoreBoard2.textContent = "Computer Score: " + computerScore + " 📄";
+    scoreBoard.textContent = "Player Score: " + playerScore + " 🪨";
+
     return result;
   } else if (playerSelection === "rock" && computerSelection === "scissors") {
-    playerScore++;
+    if (playerScore < 5 && computerScore < 5) {
+      playerScore++;
+    } else {
+      scoreBoard.textContent = "Player Score: " + playerScore + " 🪨";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + "✂️";
+      let result = "Game Over";
+      roundResult.textContent = result;
+    }
+    scoreBoard.textContent = "Player Score: " + playerScore;
+    scoreBoard2.textContent = "Computer Score: " + computerScore;
+
     let result = "You win. rock beats scissors";
+    roundResult.textContent = result;
+
     return result;
   } else if (playerSelection === "paper" && computerSelection === "scissors") {
-    computerScore++;
+    if (computerScore < 5 && playerScore < 5) {
+      computerScore++;
+    }
+    scoreBoard2.textContent = "Computer Score: " + computerScore + " ✂️";
+    scoreBoard.textContent = "Player Score: " + playerScore + " 📄";
     let result = "You lose. scissors beats paper";
+    roundResult.textContent = result;
+
     return result;
   } else if (playerSelection === "paper" && computerSelection === "rock") {
-    playerScore++;
+    if (playerScore < 5 && computerScore < 5) {
+      playerScore++;
+    } else {
+      scoreBoard.textContent = "Player Score: " + playerScore + " 📄";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + " 🪨";
+      let result = "Game Over";
+      roundResult.textContent = result;
+    }
+    scoreBoard.textContent = "Player Score: " + playerScore + " 📄";
+    scoreBoard2.textContent = "Computer Score: " + computerScore + " 🪨";
     let result = "You win. paper beats rock";
+    roundResult.textContent = result;
+
     return result;
   } else if (playerSelection === "scissors" && computerSelection === "rock") {
-    computerScore++;
+    if (computerScore < 5 && playerScore < 5) {
+      computerScore++;
+    }
+    scoreBoard2.textContent = "Computer Score: " + computerScore + "🪨";
+    scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
     let result = "You lose. rock beats scissors";
+    roundResult.textContent = result;
+
     return result;
   } else if (playerSelection === "scissors" && computerSelection === "paper") {
-    playerScore++;
-    let result = "You win. scissors beats paper";
-    return result;
+    if (playerScore < 5 && computerScore < 5) {
+      playerScore++;
+      scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + "📄";
+      let result = "You win. scissors beats paper";
+      roundResult.textContent = result;
+    } else {
+      scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + "📄";
+      let result = "Game Over";
+      roundResult.textContent = result;
+      return result;
+    }
   } else {
-    let result = "Play again.";
+    let result = "Tie Game";
+    if (playerSelection == "rock" && computerSelection == "rock") {
+      scoreBoard.textContent = "Player Score: " + playerScore + "🪨";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + "🪨";
+    } else if (playerSelection == "paper" && computerSelection == "paper") {
+      scoreBoard.textContent = "Player Score: " + playerScore + "📄";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + "📄";
+    } else {
+      scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
+      scoreBoard2.textContent = "Computer Score: " + computerScore + "✂️";
+    }
+
+    roundResult.textContent = result;
+
     return result;
   }
-}
+};
 
-// function game() {
-//   for (let i = 1; i <= 5; i++) {
-//     console.log(playerScore);
-//     console.log(computerScore);
-//     console.log(playRound());
-//   }
-//   console.log(
-//     `The final score is:\nPlayer Score:${playerScore}\nComputer Score:${computerScore}`
-//   );
-//   if (playerScore > computerScore) {
-//     console.log("You are the champion!");
-//   } else {
-//     console.log("Sorry.. Looks like the computer won..");
-//   }
-// }
 function game() {
-  while (playerScore || computerScore != 5) {
+  resetButton.addEventListener("click", (e) => {
+    scoreBoard2.setAttribute(
+      "style",
+      "color: blue; border: 2px solid blue; height:100px; width:200px; margin:10px auto;"
+    );
+    scoreBoard.setAttribute(
+      "style",
+      "color: red; border: 2px solid red; height:100px; width:200px; margin:10px auto;"
+    );
+
+    scoreBoard.style.fontSize = "32px";
+    scoreBoard2.style.fontSize = "32px";
+    roundResult.style.fontSize = "16px";
+    roundResult.style.fontWeight = "100";
+
+    scoreBoard.textContent = " ";
+    scoreBoard2.textContent = " ";
+    roundResult.textContent = " ";
+    playerScore = 0;
+    computerScore = 0;
+  });
+  while (playerScore < 5 || computerScore < 5) {
+    playRound();
     console.log(playerScore);
-    console.log(computerScore);
-    console.log(playRound());
-    if (playerScore === 5 || computerScore === 5) {
-      break;
+
+    if (playerScore == 5) {
+      console.log(
+        `The final score is:\nPlayer Score:${playerScore}\nComputer Score:${computerScore}`
+      );
+      roundResult.textContent = "You are the champion! 😆";
+      roundResult.style.fontWeight = "bold";
+      roundResult.style.fontSize = "32px";
+    } else if (computerScore == 5) {
+      scoreBoard2.style.border = "4px solid green";
+      scoreBoard.style.border = "4px solid orange";
+      console.log(
+        `The final score is:\nPlayer Score:${playerScore}\nComputer Score:${computerScore}`
+      );
+
+      roundResult.textContent = "Sorry.. Looks like the computer won.. 🥲";
+      roundResult.style.fontWeight = "bold";
+      roundResult.style.fontSize = "32px";
     }
-  }
-  console.log(
-    `The final score is:\nPlayer Score: ${playerScore}\nComputer Score: ${computerScore}`
-  );
-  if (playerScore > computerScore) {
-    console.log("You are the champion!");
-  } else {
-    console.log("Sorry.. Looks like the computer won..");
+    break;
   }
 }
-
-/* 
-
-create a function called game. Make 5 rounds using a for loop. At then end of 5 rounds, if playerSelection "You win messages" are < playerselection "you lose message". Display message "You are the rock paper scissors champion" or display "The computer is the champ!"
-
-
-while(playerScore || computerScore != 5){
-     console.log(playerScore);
-    console.log(computerScore);
-    console.log(playRound());
-    if(playerScore ===5 || computerScore === 5){
-        break:
-    }
-    if (playerScore > computerScore) {
-    console.log("You are the champion!");
-  } else {
-    console.log("Sorry.. Looks like the computer won..");
-  }
-    
-}
-
-
-
-Make a function for the game play. That takes two parameters, computer selection and player selection.
-
-If player selects rock && computer selects paper. Display message "You lose. Paper beats rock" and end the game. 
-
-If player selects rock && computer selects scissors. Display message "You win. rock beats scissors" and end the game.
-
-
-If player selects paper && computer selects scissors. Display message "You lose. scissors beats paper" and end the game.
-
-If player selects paper && computer selects rock. Display message "You win. paper beats rock" and end the game.
-
-If player selects scissors && computer selects rock. Display message "You lose. rock beats scissors" and end the game.
-
-If player selects scissors && computer selects paper. Display message "You win. scissors beats paper" and end the game.
-
-if player random number == computer random number, play again
-
-
-*/
