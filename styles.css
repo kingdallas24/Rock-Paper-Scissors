@@ -122,7 +122,6 @@ p {
 .mainPic {
   margin-top: 75px;
   position: absolute;
-  left: 30%;
 
   height: auto;
   width: 800px;
@@ -205,4 +204,10 @@ p {
 .resetBtn:hover {
   color: white;
   background: black;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: items center;
 }
