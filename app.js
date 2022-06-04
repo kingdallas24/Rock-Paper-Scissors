@@ -1,74 +1,77 @@
 let btn = document.querySelectorAll(".btn");
+
+let resetBtn = document.querySelector(".resetBtn");
+let startBtn = document.querySelector(".startBtn");
+let computerScoreBoard = document.querySelector(".computerScoreBoard");
+let playerScoreBoard = document.querySelector(".playerScoreBoard");
+let roundResult = document.querySelector(".roundResult");
+let playerEmoji = document.querySelector(".playerEmoji");
+let computerEmoji = document.querySelector(".computerEmoji");
+let audio = document.querySelector(".btnSound");
+let audioWin = document.querySelector(".winSound");
+let audioLose = document.querySelector(".loseSound");
+let audioReset = document.querySelector(".resetSound");
+let mainPic = document.querySelector(".mainPic");
+let h1 = document.querySelector(".header");
+let playerSelection = "";
 let playerScore = 0;
 let computerScore = 0;
-
-let playerSelection = "";
-let scoreBoard = document.createElement("div");
-let scoreBoard2 = document.createElement("div");
-
-let roundResult = document.createElement("p");
-let startButton = document.createElement("button");
-let resetButton = document.createElement("button");
-resetButton.classList.add("btn");
-
-scoreBoard.textContent;
-scoreBoard2.textContent;
-startButton.textContent = "Start";
-resetButton.textContent = "Reset";
-scoreBoard.setAttribute(
-  "style",
-  "color: red; border: 2px solid red; height:100px; width:200px; margin:10px auto;"
-);
-
-scoreBoard2.setAttribute(
-  "style",
-  "color: blue; border: 2px solid blue; height:100px; width:200px; margin:10px auto;"
-);
-
-scoreBoard.style.fontSize = "32px";
-scoreBoard2.style.fontSize = "32px";
-
-resetButton.setAttribute(
-  "style",
-  "background: white; position:absolute; left: 50%"
-);
-startButton.setAttribute(
-  "style",
-  "background: white;position:absolute; left: 43%"
-);
-
-roundResult.style.textAlign = "center";
-document.body.appendChild(scoreBoard);
-document.body.appendChild(scoreBoard2);
-
-document.body.appendChild(roundResult);
-document.body.appendChild(startButton);
-document.body.appendChild(resetButton);
-
-startButton.addEventListener("mouseover", (e) => {
-  e.target.style.background = "hsl(0, 3%, 72%)";
+resetBtn.disabled = true;
+btn.forEach(function (btn) {
+  btn.disabled = true;
 });
 
-startButton.addEventListener("mouseleave", (e) => {
-  e.target.style.background = "white";
+startBtn.addEventListener("click", (e) => {
+  mainPic.classList.add("disappear");
+  h1.classList.add("h1Shrink");
+  btn.forEach(function (btn) {
+    btn.classList.add("appear");
+  });
+
+  audio.play();
+
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  playerChoice();
+
+  btn.forEach(function (btn) {
+    btn.disabled = false;
+  });
+
+  resetBtn.disabled = false;
+  startBtn.disabled = true;
 });
 
-resetButton.addEventListener("mouseover", (e) => {
-  e.target.style.background = "hsl(0, 3%, 72%)";
+resetBtn.addEventListener("click", (e) => {
+  audioReset.play();
+  const timeDelay = setTimeout(resetGame, 500);
 });
 
-resetButton.addEventListener("mouseleave", (e) => {
-  e.target.style.background = "white";
-});
+function resetGame() {
+  roundResult = "";
+  location.reload();
+  startBtn.disabled = false;
+  audioWin.play();
+}
 
-startButton.addEventListener("click", (e) => {
-  startGame();
-  scoreBoard2.textContent = "Computer Score: " + computerScore;
+function playerChoice() {
+  btn.forEach((choice) => {
+    choice.addEventListener("click", (e) => {
+      audio.play();
+      if (choice.classList.contains("rock")) {
+        playerSelection = "rock";
+      } else if (choice.classList.contains("scissors")) {
+        playerSelection = "scissors";
+      } else if (choice.classList.contains("paper")) {
+        playerSelection = "paper";
+      }
 
-  scoreBoard.textContent = "Player Score: " + playerScore;
-});
+      gamePlay();
+    });
+  });
+}
 
-function computerPlay() {
+function computerChoice() {
   if (Math.random() * 10 >= 0 && Math.random() * 10 <= 10 * (1 / 3)) {
     return "rock";
   } else if (
@@ -81,163 +84,110 @@ function computerPlay() {
   }
 }
 
-function startGame() {
-  btn.forEach((choice) => {
-    choice.addEventListener("click", (e) => {
-      if (choice.classList.contains("rock")) {
-        playerSelection = "rock";
-      } else if (choice.classList.contains("scissors")) {
-        playerSelection = "scissors";
-      } else if (choice.classList.contains("paper")) {
-        playerSelection = "paper";
-      }
+function playRound() {
+  let computerSelection = computerChoice();
 
-      game();
-    });
-  });
+  if (playerSelection == "rock" && computerSelection == "paper") {
+    console.log(playerSelection);
+    console.log(computerSelection);
+    ++computerScore;
+    roundResult.textContent = "You lose. Paper beats rock.";
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+    playerEmoji.textContent = "🪨";
+    computerEmoji.textContent = "📄";
+  } else if (playerSelection == "rock" && computerSelection == "scissors") {
+    console.log(playerSelection);
+    console.log(computerSelection);
+    ++playerScore;
+    roundResult.textContent = "You win! Rock beats scissors!";
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+    playerEmoji.textContent = "🪨";
+    computerEmoji.textContent = "✂️";
+  } else if (playerSelection == "paper" && computerSelection == "scissors") {
+    console.log(playerSelection);
+    console.log(computerSelection);
+    ++computerScore;
+    playerEmoji.textContent = "📄";
+    computerEmoji.textContent = "✂️";
+    roundResult.textContent = "You lose. Scissors beats paper.";
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  } else if (playerSelection == "paper" && computerSelection == "rock") {
+    ++playerScore;
+    roundResult.textContent = "You win! Paper beats rock.";
+    playerEmoji.textContent = "📄";
+    computerEmoji.textContent = "🪨";
+    console.log(playerSelection);
+    console.log(computerSelection);
+
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  } else if (playerSelection == "scissors" && computerSelection == "rock") {
+    console.log(playerSelection);
+    console.log(computerSelection);
+    ++computerScore;
+    playerEmoji.textContent = "✂️";
+    computerEmoji.textContent = "🪨";
+    roundResult.textContent = "You lose. Rock beats scissors.";
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  } else if (playerSelection == "scissors" && computerSelection == "paper") {
+    console.log(playerSelection);
+    console.log(computerSelection);
+    ++playerScore;
+    playerEmoji.textContent = "✂️";
+    computerEmoji.textContent = "📄";
+    roundResult.textContent = "You win! Scissors beats paper.";
+
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  } else if (playerSelection == computerSelection) {
+    roundResult.textContent = "Tie game!";
+    playerScoreBoard.textContent = "Player Score:" + playerScore;
+    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+    if (playerSelection == "rock" && computerSelection == "rock") {
+      playerEmoji.textContent = "🪨";
+      computerEmoji.textContent = "🪨";
+    } else if (playerSelection == "paper" && computerSelection == "paper") {
+      computerEmoji.textContent = "📄";
+      playerEmoji.textContent = "📄";
+    } else if (
+      playerSelection == "scissors" &&
+      computerSelection == "scissors"
+    ) {
+      computerEmoji.textContent = "✂️";
+      playerEmoji.textContent = "✂️";
+    }
+  }
 }
 
-let playRound = function () {
-  const computerSelection = computerPlay();
-
-  if (playerSelection === "rock" && computerSelection === "paper") {
-    let result = "You lose. Paper beats rock";
-    roundResult.textContent = result;
-
-    if (computerScore < 5 && playerScore < 5) {
-      computerScore++;
-    }
-    scoreBoard2.textContent = "Computer Score: " + computerScore + " 📄";
-    scoreBoard.textContent = "Player Score: " + playerScore + " 🪨";
-
-    return result;
-  } else if (playerSelection === "rock" && computerSelection === "scissors") {
-    if (playerScore < 5 && computerScore < 5) {
-      playerScore++;
-    } else {
-      scoreBoard.textContent = "Player Score: " + playerScore + " 🪨";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + "✂️";
-      let result = "Game Over";
-      roundResult.textContent = result;
-    }
-    scoreBoard.textContent = "Player Score: " + playerScore;
-    scoreBoard2.textContent = "Computer Score: " + computerScore;
-
-    let result = "You win. rock beats scissors";
-    roundResult.textContent = result;
-
-    return result;
-  } else if (playerSelection === "paper" && computerSelection === "scissors") {
-    if (computerScore < 5 && playerScore < 5) {
-      computerScore++;
-    }
-    scoreBoard2.textContent = "Computer Score: " + computerScore + " ✂️";
-    scoreBoard.textContent = "Player Score: " + playerScore + " 📄";
-    let result = "You lose. scissors beats paper";
-    roundResult.textContent = result;
-
-    return result;
-  } else if (playerSelection === "paper" && computerSelection === "rock") {
-    if (playerScore < 5 && computerScore < 5) {
-      playerScore++;
-    } else {
-      scoreBoard.textContent = "Player Score: " + playerScore + " 📄";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + " 🪨";
-      let result = "Game Over";
-      roundResult.textContent = result;
-    }
-    scoreBoard.textContent = "Player Score: " + playerScore + " 📄";
-    scoreBoard2.textContent = "Computer Score: " + computerScore + " 🪨";
-    let result = "You win. paper beats rock";
-    roundResult.textContent = result;
-
-    return result;
-  } else if (playerSelection === "scissors" && computerSelection === "rock") {
-    if (computerScore < 5 && playerScore < 5) {
-      computerScore++;
-    }
-    scoreBoard2.textContent = "Computer Score: " + computerScore + "🪨";
-    scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
-    let result = "You lose. rock beats scissors";
-    roundResult.textContent = result;
-
-    return result;
-  } else if (playerSelection === "scissors" && computerSelection === "paper") {
-    if (playerScore < 5 && computerScore < 5) {
-      playerScore++;
-      scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + "📄";
-      let result = "You win. scissors beats paper";
-      roundResult.textContent = result;
-    } else {
-      scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + "📄";
-      let result = "Game Over";
-      roundResult.textContent = result;
-      return result;
-    }
-  } else {
-    let result = "Tie Game";
-    if (playerSelection == "rock" && computerSelection == "rock") {
-      scoreBoard.textContent = "Player Score: " + playerScore + "🪨";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + "🪨";
-    } else if (playerSelection == "paper" && computerSelection == "paper") {
-      scoreBoard.textContent = "Player Score: " + playerScore + "📄";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + "📄";
-    } else {
-      scoreBoard.textContent = "Player Score: " + playerScore + "✂️";
-      scoreBoard2.textContent = "Computer Score: " + computerScore + "✂️";
-    }
-
-    roundResult.textContent = result;
-
-    return result;
-  }
-};
-
-function game() {
-  resetButton.addEventListener("click", (e) => {
-    scoreBoard2.setAttribute(
-      "style",
-      "color: blue; border: 2px solid blue; height:100px; width:200px; margin:10px auto;"
-    );
-    scoreBoard.setAttribute(
-      "style",
-      "color: red; border: 2px solid red; height:100px; width:200px; margin:10px auto;"
-    );
-
-    scoreBoard.style.fontSize = "32px";
-    scoreBoard2.style.fontSize = "32px";
-    roundResult.style.fontSize = "16px";
-    roundResult.style.fontWeight = "100";
-
-    scoreBoard.textContent = " ";
-    scoreBoard2.textContent = " ";
-    roundResult.textContent = " ";
-    playerScore = 0;
-    computerScore = 0;
-  });
-  while (playerScore < 5 || computerScore < 5) {
+function gamePlay() {
+  while (playerScore !== 5 && computerScore !== 5) {
     playRound();
-    console.log(playerScore);
-
     if (playerScore == 5) {
-      console.log(
-        `The final score is:\nPlayer Score:${playerScore}\nComputer Score:${computerScore}`
-      );
-      roundResult.textContent = "You are the champion! 😆";
-      roundResult.style.fontWeight = "bold";
-      roundResult.style.fontSize = "32px";
-    } else if (computerScore == 5) {
-      scoreBoard2.style.border = "4px solid green";
-      scoreBoard.style.border = "4px solid orange";
-      console.log(
-        `The final score is:\nPlayer Score:${playerScore}\nComputer Score:${computerScore}`
-      );
+      roundResult.classList.add("winMsg");
+      roundResult.textContent = "You are the champion!";
 
-      roundResult.textContent = "Sorry.. Looks like the computer won.. 🥲";
-      roundResult.style.fontWeight = "bold";
-      roundResult.style.fontSize = "32px";
+      audioWin.play();
+      startBtn.disabled = true;
+      resetBtn.disabled = false;
+      btn.disabled = true;
+      playerScoreBoard.classList.add("winner");
+      computerScoreBoard.classList.add("loser");
+    } else if (computerScore == 5) {
+      roundResult.classList.add("loseMsg");
+      roundResult.textContent =
+        "Sorry, it looks like the computer is the winner.";
+
+      audioLose.play();
+
+      startBtn.disabled = true;
+      resetBtn.disabled = false;
+      btn.disabled = true;
+      playerScoreBoard.classList.add("loser");
+      computerScoreBoard.classList.add("winner");
     }
     break;
   }
