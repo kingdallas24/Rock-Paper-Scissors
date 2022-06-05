@@ -11,6 +11,7 @@ let audio = document.querySelector(".btnSound");
 let audioWin = document.querySelector(".winSound");
 let audioLose = document.querySelector(".loseSound");
 let audioReset = document.querySelector(".resetSound");
+let audioSlotMachine = document.querySelector(".slotMachine");
 let mainPic = document.querySelector(".mainPic");
 let h1 = document.querySelector(".header");
 let playerSelection = "";
@@ -57,7 +58,8 @@ function resetGame() {
 function playerChoice() {
   btn.forEach((choice) => {
     choice.addEventListener("click", (e) => {
-      audio.play();
+      audioSlotMachine.play();
+      flash();
       if (choice.classList.contains("rock")) {
         playerSelection = "rock";
       } else if (choice.classList.contains("scissors")) {
@@ -69,6 +71,44 @@ function playerChoice() {
       gamePlay();
     });
   });
+}
+
+function flash() {
+  setTimeout(flashPaper, 100);
+  setTimeout(flashScissors, 200);
+  setTimeout(flashRock, 300);
+  setTimeout(flashScissors, 400);
+  setTimeout(flashPaper, 500);
+  setTimeout(flashRock, 600);
+  setTimeout(flashScissors, 700);
+  setTimeout(flashPaper, 800);
+  setTimeout(flashRock, 900);
+  setTimeout(flashPaper, 1000);
+  setTimeout(flashScissors, 1100);
+  setTimeout(flashRock, 1200);
+  setTimeout(flashPaper, 1300);
+  setTimeout(flashRock, 1400);
+  setTimeout(flashScissors, 1500);
+  setTimeout(flashPaper, 1600);
+  setTimeout(flashRock, 1700);
+  setTimeout(flashScissors, 1800);
+  setTimeout(flashPaper, 1900);
+  setTimeout(flashRock, 2000);
+  setTimeout(flashScissors, 2100);
+  setTimeout(flashRock, 2200);
+}
+
+function flashPaper() {
+  playerEmoji.textContent = "📄";
+  computerEmoji.textContent = "📄";
+}
+function flashScissors() {
+  playerEmoji.textContent = "✂️";
+  computerEmoji.textContent = "✂️";
+}
+function flashRock() {
+  playerEmoji.textContent = "🪨";
+  computerEmoji.textContent = "🪨";
 }
 
 function computerChoice() {
@@ -91,36 +131,20 @@ function playRound() {
     console.log(playerSelection);
     console.log(computerSelection);
     ++computerScore;
-    roundResult.textContent = "You lose. Paper beats rock.";
-    playerScoreBoard.textContent = "Player Score:" + playerScore;
-    computerScoreBoard.textContent = "Computer Score:" + computerScore;
-    playerEmoji.textContent = "🪨";
-    computerEmoji.textContent = "📄";
+    setTimeout(resultDelayRockLose, 2300);
   } else if (playerSelection == "rock" && computerSelection == "scissors") {
     console.log(playerSelection);
     console.log(computerSelection);
     ++playerScore;
-    roundResult.textContent = "You win! Rock beats scissors!";
-    playerScoreBoard.textContent = "Player Score:" + playerScore;
-    computerScoreBoard.textContent = "Computer Score:" + computerScore;
-    playerEmoji.textContent = "🪨";
-    computerEmoji.textContent = "✂️";
+    setTimeout(resultDelayRockWin, 2300);
   } else if (playerSelection == "paper" && computerSelection == "scissors") {
     console.log(playerSelection);
     console.log(computerSelection);
     ++computerScore;
-    playerEmoji.textContent = "📄";
-    computerEmoji.textContent = "✂️";
-    roundResult.textContent = "You lose. Scissors beats paper.";
-    playerScoreBoard.textContent = "Player Score:" + playerScore;
-    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+    setTimeout(resultDelayPaperLose, 2300);
   } else if (playerSelection == "paper" && computerSelection == "rock") {
     ++playerScore;
-    roundResult.textContent = "You win! Paper beats rock.";
-    playerEmoji.textContent = "📄";
-    computerEmoji.textContent = "🪨";
-    console.log(playerSelection);
-    console.log(computerSelection);
+    setTimeout(resultDelayPaperWin, 2300);
 
     playerScoreBoard.textContent = "Player Score:" + playerScore;
     computerScoreBoard.textContent = "Computer Score:" + computerScore;
@@ -128,67 +152,139 @@ function playRound() {
     console.log(playerSelection);
     console.log(computerSelection);
     ++computerScore;
-    playerEmoji.textContent = "✂️";
-    computerEmoji.textContent = "🪨";
-    roundResult.textContent = "You lose. Rock beats scissors.";
-    playerScoreBoard.textContent = "Player Score:" + playerScore;
-    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+    setTimeout(resultDelayScissorsLose, 2300);
   } else if (playerSelection == "scissors" && computerSelection == "paper") {
     console.log(playerSelection);
     console.log(computerSelection);
     ++playerScore;
-    playerEmoji.textContent = "✂️";
-    computerEmoji.textContent = "📄";
-    roundResult.textContent = "You win! Scissors beats paper.";
-
-    playerScoreBoard.textContent = "Player Score:" + playerScore;
-    computerScoreBoard.textContent = "Computer Score:" + computerScore;
+    setTimeout(resultDelayScissorsWin, 2300);
   } else if (playerSelection == computerSelection) {
     roundResult.textContent = "Tie game!";
     playerScoreBoard.textContent = "Player Score:" + playerScore;
     computerScoreBoard.textContent = "Computer Score:" + computerScore;
     if (playerSelection == "rock" && computerSelection == "rock") {
-      playerEmoji.textContent = "🪨";
-      computerEmoji.textContent = "🪨";
+      setTimeout(rockTieDelay, 2300);
     } else if (playerSelection == "paper" && computerSelection == "paper") {
-      computerEmoji.textContent = "📄";
-      playerEmoji.textContent = "📄";
+      setTimeout(paperTieDelay, 2300);
     } else if (
       playerSelection == "scissors" &&
       computerSelection == "scissors"
     ) {
-      computerEmoji.textContent = "✂️";
-      playerEmoji.textContent = "✂️";
+      setTimeout(scissorsTieDelay, 2300);
     }
   }
+}
+
+function resultDelayRockLose() {
+  roundResult.textContent = "You lose. Paper beats rock.";
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  playerEmoji.textContent = "🪨";
+  computerEmoji.textContent = "📄";
+}
+
+function resultDelayRockWin() {
+  roundResult.textContent = "You win! Rock beats scissors!";
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  playerEmoji.textContent = "🪨";
+  computerEmoji.textContent = "✂️";
+}
+
+function resultDelayPaperWin() {
+  roundResult.textContent = "You win! Paper beats rock.";
+  playerEmoji.textContent = "📄";
+  computerEmoji.textContent = "🪨";
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+}
+
+function resultDelayPaperLose() {
+  playerEmoji.textContent = "📄";
+  computerEmoji.textContent = "✂️";
+  roundResult.textContent = "You lose. Scissors beats paper.";
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+}
+
+function resultDelayScissorsWin() {
+  playerEmoji.textContent = "✂️";
+  computerEmoji.textContent = "📄";
+  roundResult.textContent = "You win! Scissors beats paper.";
+
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+}
+
+function resultDelayScissorsLose() {
+  playerEmoji.textContent = "✂️";
+  computerEmoji.textContent = "🪨";
+  roundResult.textContent = "You lose. Rock beats scissors.";
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+}
+
+function TieDelay() {
+  roundResult.textContent = "Tie game!";
+  playerScoreBoard.textContent = "Player Score:" + playerScore;
+  computerScoreBoard.textContent = "Computer Score:" + computerScore;
+  if (playerSelection == "rock" && computerSelection == "rock") {
+    playerEmoji.textContent = "🪨";
+    computerEmoji.textContent = "🪨";
+  } else if (playerSelection == "paper" && computerSelection == "paper") {
+    computerEmoji.textContent = "📄";
+    playerEmoji.textContent = "📄";
+  } else if (playerSelection == "scissors" && computerSelection == "scissors") {
+    computerEmoji.textContent = "✂️";
+    playerEmoji.textContent = "✂️";
+  }
+}
+
+function rockTieDelay() {
+  playerEmoji.textContent = "🪨";
+  computerEmoji.textContent = "🪨";
+}
+
+function paperTieDelay() {
+  computerEmoji.textContent = "📄";
+  playerEmoji.textContent = "📄";
+}
+
+function scissorsTieDelay() {
+  computerEmoji.textContent = "✂️";
+  playerEmoji.textContent = "✂️";
 }
 
 function gamePlay() {
   while (playerScore !== 5 && computerScore !== 5) {
     playRound();
-    if (playerScore == 5) {
-      roundResult.classList.add("winMsg");
-      roundResult.textContent = "You are the champion!";
-
-      audioWin.play();
-      startBtn.disabled = true;
-      resetBtn.disabled = false;
-      btn.disabled = true;
-      playerScoreBoard.classList.add("winner");
-      computerScoreBoard.classList.add("loser");
-    } else if (computerScore == 5) {
-      roundResult.classList.add("loseMsg");
-      roundResult.textContent =
-        "Sorry, it looks like the computer is the winner.";
-
-      audioLose.play();
-
-      startBtn.disabled = true;
-      resetBtn.disabled = false;
-      btn.disabled = true;
-      playerScoreBoard.classList.add("loser");
-      computerScoreBoard.classList.add("winner");
-    }
+    setTimeout(finalResultDelay, 2450);
     break;
+  }
+}
+
+function finalResultDelay() {
+  if (playerScore == 5) {
+    roundResult.classList.add("winMsg");
+    roundResult.textContent = "You are the champion!";
+
+    audioWin.play();
+    startBtn.disabled = true;
+    resetBtn.disabled = false;
+    btn.disabled = true;
+    playerScoreBoard.classList.add("winner");
+    computerScoreBoard.classList.add("loser");
+  } else if (computerScore == 5) {
+    roundResult.classList.add("loseMsg");
+    roundResult.textContent =
+      "Sorry, it looks like the computer is the winner.";
+
+    audioLose.play();
+
+    startBtn.disabled = true;
+    resetBtn.disabled = false;
+    btn.disabled = true;
+    playerScoreBoard.classList.add("loser");
+    computerScoreBoard.classList.add("winner");
   }
 }
